@@ -23,7 +23,29 @@ from nltk.tokenize import wordpunct_tokenize
 np.set_printoptions(suppress =True, precision=3)
 #import logging as log #install the logging module to enable logging of the results
 #log.basicConfig(filename='C:/results.txt', format='%(message)s', level=log.DEBUG)
+'''
+Hot to use this script:
+1. Add paths to the data files (first line in main)
+2. Load data with pandas or otherwise (line two)
+3. Build your array of features (vectorizers)
+4a. Choose your array of classifies (clfs)
+4b. Choose your array of classifies in such a way that classifiers 
+    that require dimensionality reduction come last.
+    Then fill in the array lsa_classifier:
+    A 0 for no dimensionality reduction and a 1 for dimensionality 
+    reduction for that classifier
+5. Adjust the output file parameters if necessary
+6. Run the script and obtain your predictions file (this is a normal average of all classifiers and all features)
+7. To optimize the result all prediction are separately stacked and saved at the end.
+   Load this file and optimize it with your procedure of choice.
+   You can run this script with parameter cv_split = 0.2 to obtain a stacked 
+   cross validation prediction on which you can optimize the test error.
+   
+Tweak all parameter, features, classifiers etc. for your problem to receive the best results.
 
+Do you encounter any problems?
+Contact me: Tim.dettmers@gmail.com
+'''
 
 
 def main():
@@ -115,7 +137,7 @@ def main():
       
     #comment = 'full, SnowballTokenizer no RF'
     use_lsa = 0
-    cv_split = 0
+    cv_split = 0.2
     n = int(np.round(len(t['tweet'].tolist())))
     train_end = int(np.round(n*(1-cv_split)))
     cv_beginning = int(np.round( n*(1-cv_split
@@ -150,8 +172,8 @@ def main():
         clf3 = RandomForestRegressor(max_depth = 20, n_estimators = 36, max_features = 100, n_jobs = 6)
         clf4 = Ridge()       
        
-        clfs = [clf4]
-        lsa_classifier = [0]
+        clfs = [clf4, clf3]
+        lsa_classifier = [0, 1]
         prediction_all = 0
         predict_cv_all = 0
         for clf, use_lsa in zip(clfs,lsa_classifier):            

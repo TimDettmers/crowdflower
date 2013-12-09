@@ -102,7 +102,7 @@ tfidf10 = TfidfVectorizer(max_features=9000, strip_accents='unicode',
 vectorizers = [tfidf1]
 tfidf = vectorizers[0]
 #comment = 'lsa = 1, tfidf2, 175000 -> 1000'
-comment = 'tfidf1, with hidden multiplier'
+comment = 'tfidf1, transition 75'
 
 y = np.array(t.ix[:,4:])#[:,9:]
 y_original = np.array(t.ix[:,4:])#[:,9:]
@@ -110,9 +110,6 @@ cv_split = 0.2
 n = int(np.round(len(t['tweet'].tolist())))
 train_end = int(np.round(n*(1-cv_split)))
 cv_beginning = int(np.round( n*(1-cv_split if cv_split > 0 else 0.8)))
-
-print y.shape
-print y_original.shape
 
 train = t['tweet'].tolist()[0:train_end]
 cv_X_original = np.array(t['tweet'].tolist()[cv_beginning:])
